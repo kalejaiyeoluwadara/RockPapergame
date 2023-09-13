@@ -1,0 +1,29 @@
+*{
+    font-family: poppins;
+}
+.header{
+    border: 6px solid rgba(255, 255, 255, 0.266);
+}
+.foot{
+    background-color: transparent;
+    border: 1px solid white;
+    border-radius: 10px;
+    /* height:30px; */
+    width: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.shad{
+    box-shadow: inset 3px 8px 10px rgba(0, 0, 0, 0.448),
+     3px 8px 10px rgba(0, 0, 0, 0.304);
+}
+.main{
+    background-image: url('./assets/bg-pentagon.svg');
+    background-repeat: none;
+    background-size: cover;
+}
+.game{
+    background-image: radial-gradient(hsl(214, 47%, 23%) , hsl(237, 49%, 15%))
+}
