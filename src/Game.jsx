@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import './App.css'
-
+import {motion,AnimatePresence} from 'framer-motion'
 import close from './assets/icon-close.svg'
 import pentagon from './assets/bg-pentagon.svg'
 import rules from './assets/image-rules-bonus.svg'
@@ -8,6 +8,7 @@ import Status from './Status'
 // import { slots } from './slots'
 import { useGlobal } from './context';
 const Header = () =>{
+  const {score} = useGlobal();
     return (
       <header className="flex w-[80%] justify-between items-center px-6 py-2 header rounded-[9px]   ">
         <div className="flex flex-col leading-[14px] uppercase font-[600] text-white ">
@@ -23,7 +24,7 @@ const Header = () =>{
         </div>
         <div className="flex rounded-md items-center uppercase bg-white flex-col leading-[43px] px-8 py-2 ">
           <p className="text-blue-600 font-[600] ">score</p>
-          <p className="text-[48px] text-gray-700  font-[800]">12</p>
+          <p className="text-[48px] text-gray-700  font-[800]">{score}</p>
         </div>
       </header>
     );
@@ -47,49 +48,99 @@ const Footer = () => {
 const Rules = () =>{
   const { setRules } = useGlobal();
   return (
-    <div className="absolute bg-white flex  gap-10 flex-col items-center justify-center top-0 h-screen w-screen z-20">
+    <motion.div
+      initial={{
+        y: "-100vh",
+      }}
+      animate={{
+        y: 0,
+      }}
+      transition={{
+        duration: 0.5,
+      }}
+      exit={{
+        scale:0
+      }}
+      className="absolute bg-white flex  gap-10 flex-col items-center justify-center top-0 h-screen w-screen z-20"
+    >
       <img src={rules} className="" alt="" />
-      <img onClick={() =>{
-        setRules(false)
-      }} src={close} className='cursor-pointer' alt="" />
-    </div>
+      <img
+        onClick={() => {
+          setRules(false);
+        }}
+        src={close}
+        className="cursor-pointer"
+        alt=""
+      />
+    </motion.div>
   );
 }
 export const Select = ({img,color,choice}) =>{
-  const {user,setUser} =useGlobal();
- return(
-    <div 
-    style={{
-        borderColor:`${color}`
-    }}
-    onClick={() =>{
-      setUser(choice)
-      // if(user === 'rock'){
-      //   console.log(true);
-      // }
-      // else{
-      //   console.log(false);
-      // }
-      console.log(user);
-    }}
-    className={`bg-white border-[15px] shad  h-[120px] w-[120px] rounded-full flex items-center justify-center  `}>
-        <img src={img} alt="" />
-    </div>
- )
+  const {user,setUser,setHouse,score,setScore,house,msg,setMsg} =useGlobal();
+  let a = Math.floor(Math.random() * 5);
+  var opts = ["lizard", "paper", "rock", "spock", "scissors"];
+ return (
+   <motion.div
+   transition={{
+    duration:0.3
+   }}
+     whileTap={{
+       scale: 0.6,
+     }}
+     whileHover={{
+       scale: 1.2,
+     }}
+     style={{
+       borderColor: `${color}`,
+     }}
+     onClick={() => {
+       setHouse(opts[a]);
+       setUser(choice);
+       msg === "you win" ? setScore(score + 1) : setScore(score - 1);
+       // if(msg === 'you win'){
+       //   // setScore(score +1)
+       //   console.log(true);
+       // }
+       // else if (msg === "you lose") {
+       //   // setScore(score -1)
+       //   console.log(false);
+       // }
+       // else{
+       //   console.log('tie');
+       // }
+     }}
+     className={`bg-white border-[15px] shad  h-[120px] w-[120px] rounded-full flex items-center justify-center  `}
+   >
+     <img src={img} alt="" />
+   </motion.div>
+ );
 }
 const Main = () =>{
   const { lizard, paper, rock,user, spock, scissors } = useGlobal();
     return (
-      <>
+      <AnimatePresence>
         {!user ? (
-          <main className="relative py-8 flex flex-col px-6 gap-6 items-center  justify-center h-[500px] w-[100%] ">
+          <motion.main
+          initial={{
+            scale:0.1
+          }}
+          animate={{
+            scale:1
+          }}
+          transition={{
+            duration:0.6
+          }}
+          exit={{
+            scale:0
+          }}
+          className="relative py-8 flex flex-col px-6 gap-6 items-center  justify-center h-[500px] w-[100%] ">
             <div className="relative w-[100%] z-20 flex flex-col gap-6 items-center  justify-center">
               <div>
-                {/* <Select
-                  img={slots.scissors.img}
-                  choice={slots.scissors.choice}
-                  color={slots.scissors.color}
-                /> */}
+                <Select
+                  img={scissors}
+                  choice={'scissors'}
+                  color={'hsl(39, 89%, 49%)'}
+                />
               </div>
               <div className="flex w-[99%] justify-between ">
                 <Select
@@ -119,24 +170,24 @@ const Main = () =>{
             <div className="absolute z-10 ">
               <img className=" " src={pentagon} alt="" />
             </div>
-          </main>
+          </motion.main>
         ) : (
           <Status />
         )}
-      </>
+      </AnimatePresence>
     );
 }
 
 function Game() {
   const { rules, setRules } = useGlobal();
   return (
-    <div className='game py-3 relative justify-center items-center flex flex-col h-screen overflow-x-hidden w-screen ' >
-      <Header/>
-      <Main/>
-      {rules && <Rules/>}
-      <Footer/>
+    <div className="game py-3 relative justify-center items-center flex flex-col h-screen overflow-x-hidden w-screen ">
+      <Header />
+      <Main />
+      <AnimatePresence>{rules && <Rules />}</AnimatePresence>
+      <Footer />
     </div>
-  )
+  );
 }
 
 export default Game
