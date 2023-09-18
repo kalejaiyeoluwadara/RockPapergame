@@ -5,7 +5,7 @@ import React, { useState,useContext, createContext } from 'react';
 import Game from './game';
 const App = () =>{
     return (
-      <div className=''>
+      <div>
         <Game/>
       </div>
     );
