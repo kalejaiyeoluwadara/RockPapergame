@@ -1,5 +1,5 @@
 import React from 'react'
-import { Select } from './game';
+import { Select } from './Game';
 import { motion } from "framer-motion";
 import { useGlobal } from './context';
 function Status() {
